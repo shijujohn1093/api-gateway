@@ -1,4 +1,4 @@
-package com.thengara.gateway.filter;
+package com.thengara.apigateway.filter;
 
 import javax.servlet.http.HttpServletRequest;
 

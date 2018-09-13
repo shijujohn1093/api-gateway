@@ -1,4 +1,4 @@
-package com.thengara.gateway;
+package com.thengara.apigateway;
 
 import java.io.DataInputStream;
 import java.io.File;
@@ -20,8 +20,6 @@ import java.security.spec.RSAPublicKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.commons.io.input.ReaderInputStream;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;

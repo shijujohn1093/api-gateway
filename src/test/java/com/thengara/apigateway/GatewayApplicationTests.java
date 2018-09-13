@@ -1,4 +1,4 @@
-package com.thengara.gateway;
+package com.thengara.apigateway;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
