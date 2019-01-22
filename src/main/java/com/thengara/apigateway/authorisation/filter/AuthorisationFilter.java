@@ -1,6 +1,7 @@
 package com.thengara.apigateway.authorisation.filter;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Component;
 
@@ -36,7 +37,8 @@ public class AuthorisationFilter extends ZuulFilter {
 	public Object run() {
 		RequestContext ctx = RequestContext.getCurrentContext();
 		HttpServletRequest request = ctx.getRequest();
-		authorisationService.ve
+		HttpServletResponse response = ctx.getResponse();
+		authorisationService.validateRequest(request, response);
 		System.out.println("Request Method : " + request.getMethod() + " Request URL : " + request.getRequestURL().toString());
 		return null;
 	}
