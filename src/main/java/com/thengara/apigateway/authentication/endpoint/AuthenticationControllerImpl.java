@@ -10,13 +10,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.thengara.apigateway.authentication.model.Login;
+import com.thengara.apigateway.authentication.model.Request;
 import com.thengara.apigateway.authentication.model.Response;
 import com.thengara.apigateway.authentication.service.AuthenticationService;
 
 @RestController
 public class AuthenticationControllerImpl implements AuthenticationController {
-
-	private final String HEADER_STRING = "Authorization";
 
 	private final AuthenticationService authenticationService;
 
@@ -29,16 +28,16 @@ public class AuthenticationControllerImpl implements AuthenticationController {
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public Response<Object> login(@RequestBody Login loginInfo, HttpServletRequest request, HttpServletResponse response) {
 		String jwtToken = authenticationService.login(loginInfo.getUser(), loginInfo.getPassword());
-		response.setHeader(HEADER_STRING, jwtToken);
+		response.setHeader(Request.HEADER_STRING, jwtToken);
 		return new Response<Object>(new Object(), Response.SUCCESS);
 	}
 
 	@Override
 	@RequestMapping(value = "/refresh", method = RequestMethod.POST)
 	public Response<Object> refresh(HttpServletRequest request, HttpServletResponse response) {
-		String token = request.getHeader(HEADER_STRING);
+		String token = request.getHeader(Request.HEADER_STRING);
 		token = authenticationService.refresh(token);
-		response.setHeader(HEADER_STRING, token);
+		response.setHeader(Request.HEADER_STRING, token);
 		return new Response<Object>(new Object(), Response.SUCCESS);
 	}
 
