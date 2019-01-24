@@ -34,4 +34,5 @@ public class AuthenticationServiceProviderManagerImpl implements AuthenticationS
 		}
 		return userAuthority;
 	}
+
 }

@@ -25,19 +25,27 @@ import org.springframework.stereotype.Service;
 import com.auth0.jwt.interfaces.RSAKeyProvider;
 
 @Service
-public class RSAFileUtil {
+public class RSAKeyPairGenerator {
 
-	public final String PUBLIC = "PUBLIC";
-	public final String PRIVATE = "PRIVATE";
-	public final String RSA_ALGORITHM = "RSA";
+	public static final String PUBLIC = "PUBLIC";
+	public static final String PRIVATE = "PRIVATE";
+
 	private final int keySize = 2048;
+	private final String RSA_ALGORITHM = "RSA";
 
-	private final EnvironmentWrapper environment;
 	private final KeyFactory rsaKeyFactory;
 
-	public RSAFileUtil(EnvironmentWrapper environment) throws NoSuchAlgorithmException {
-		this.environment = environment;
+	public RSAKeyPairGenerator() throws NoSuchAlgorithmException {
 		rsaKeyFactory = KeyFactory.getInstance(RSA_ALGORITHM);
+	}
+
+	public RSAKeyProvider rsaKeyProvider(String rsaPublicFile, String rsaPrivateKey) {
+		try {
+			return this.rsaKeyProvider(this.readPublicKeyFromFile(rsaPublicFile), this.readPrivateKeyFromFile(rsaPrivateKey));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public void writeKeyInFile(File file, byte[] keyEncodedBytes) throws IOException {
@@ -84,6 +92,29 @@ public class RSAFileUtil {
 		return null;
 	}
 
+	private RSAKeyProvider rsaKeyProvider(RSAPublicKey publicKey, RSAPrivateKey privateKey) {
+		if (publicKey == null && privateKey == null) {
+			throw new IllegalArgumentException("Both provided keys cannot be null");
+		}
+		return new RSAKeyProvider() {
+
+			@Override
+			public RSAPublicKey getPublicKeyById(String id) {
+				return publicKey;
+			}
+
+			@Override
+			public String getPrivateKeyId() {
+				return null;
+			}
+
+			@Override
+			public RSAPrivateKey getPrivateKey() {
+				return privateKey;
+			}
+		};
+	}
+
 	public Map<String, Object> getRsaKeys() {
 		KeyPairGenerator generator;
 		try {
@@ -111,57 +142,12 @@ public class RSAFileUtil {
 		return null;
 	}
 
-	public RSAKeyProvider rsaKeyProvider() {
-		return this.rsaKeyProvider(this.rsaPublicKey(), this.rsaPrivateKey());
-	}
-
-	private RSAKeyProvider rsaKeyProvider(RSAPublicKey publicKey, RSAPrivateKey privateKey) {
-		if (publicKey == null && privateKey == null) {
-			throw new IllegalArgumentException("Both provided keys cannot be null");
-		}
-		return new RSAKeyProvider() {
-
-			@Override
-			public RSAPublicKey getPublicKeyById(String id) {
-				return publicKey;
-			}
-
-			@Override
-			public String getPrivateKeyId() {
-				return null;
-			}
-
-			@Override
-			public RSAPrivateKey getPrivateKey() {
-				return privateKey;
-			}
-		};
-	}
-
-	public RSAPrivateKey rsaPrivateKey() {
-		try {
-			return this.readPrivateKeyFromFile(environment.getRsaPrivateKeyFilePath());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	public RSAPublicKey rsaPublicKey() {
-		try {
-			return this.readPublicKeyFromFile(environment.getRsaPublicKeyFilePath());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
 	public void generateKeysInFile(String filePath) throws IOException {
 		Map<String, Object> rsaKeys = getRsaKeys();
 		RSAPublicKey publicKey = (RSAPublicKey) rsaKeys.get(PUBLIC);
 		RSAPrivateKey privateKey = (RSAPrivateKey) rsaKeys.get(PRIVATE);
 
-		this.writeKeyInFile(new File(filePath + "rsa_public_key.file"), publicKey.getEncoded());
-		this.writeKeyInFile(new File(filePath + "rsa_private_key.file"), privateKey.getEncoded());
+		this.writeKeyInFile(new File(filePath + "publickey.file"), publicKey.getEncoded());
+		this.writeKeyInFile(new File(filePath + "privatekey.file"), privateKey.getEncoded());
 	}
 }

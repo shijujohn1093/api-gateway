@@ -3,15 +3,15 @@ package com.thengara.apigateway.authentication.service;
 import org.springframework.stereotype.Service;
 
 import com.thengara.apigateway.authentication.model.UserAuthority;
-import com.thengara.apigateway.util.JWTTokenUtil;
+import com.thengara.apigateway.util.JWTTokenGenerator;
 
 @Service
 public class JWTAuthenticationService implements AuthenticationService {
 
 	private final AuthenticationServiceProviderManager providerManager;
-	private final JWTTokenUtil jwtUtil;
+	private final JWTTokenGenerator jwtUtil;
 
-	public JWTAuthenticationService(AuthenticationServiceProviderManager providerManager, JWTTokenUtil jwtUtil) {
+	public JWTAuthenticationService(AuthenticationServiceProviderManager providerManager, JWTTokenGenerator jwtUtil) {
 		this.providerManager = providerManager;
 		this.jwtUtil = jwtUtil;
 	}

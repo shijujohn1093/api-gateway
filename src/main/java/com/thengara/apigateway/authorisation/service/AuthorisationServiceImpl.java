@@ -11,15 +11,15 @@ import org.springframework.stereotype.Service;
 import com.thengara.apigateway.authentication.model.Request;
 import com.thengara.apigateway.authorisation.entity.Permission;
 import com.thengara.apigateway.authorisation.repository.AuthReadRepository;
-import com.thengara.apigateway.util.JWTTokenUtil;
+import com.thengara.apigateway.util.JWTTokenGenerator;
 
 @Service
 public class AuthorisationServiceImpl implements AuthorisationService {
 
 	private final AuthReadRepository authReadRepository;
-	private final JWTTokenUtil jwtUtil;
+	private final JWTTokenGenerator jwtUtil;
 
-	AuthorisationServiceImpl(AuthReadRepository authReadRepository, JWTTokenUtil jwtUtil) {
+	AuthorisationServiceImpl(AuthReadRepository authReadRepository, JWTTokenGenerator jwtUtil) {
 		this.authReadRepository = authReadRepository;
 		this.jwtUtil = jwtUtil;
 	}

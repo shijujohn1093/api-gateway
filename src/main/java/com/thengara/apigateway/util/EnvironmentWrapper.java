@@ -9,12 +9,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class EnvironmentWrapper {
 
-	private final String AUTH_PROVIDER_KEY = "auth.provider";
-	private final String AUTH_ACCESS_ROLES_KEY = "auth.access.roles";
-	private final String RSA_PUBLIC_RESOURCE_FILE = "rsa.public.resource.path";
-	private final String RSA_PRIVATE_RESOURCE_FILE = "rsa.private.resource.path";
-	private final String APPLICATION_NAME = "spring.application.name";
-	private final String APPLICATION_PREFIX = "applicaiton.prefix"; // finapps_
+	public static final String ENCRYPT_RSA_PUBLICKEY_PATH = "enc.rsa.publickey.path";
+	public static final String DECRYPT_RSA_PRIVATEKEY_PATH = "dec.rsa.publickey.path";
+	public static final String AUTH_PROVIDER_KEY = "auth.provider";
+	public static final String AUTH_ACCESS_ROLES_KEY = "auth.access.roles";
+	public static final String JWT_RSA_PUBLICKEY_PATH = "jwt.rsa.publickey.path";
+	public static final String JWT_RSA_PRIVATEKEY_PATH = "jwt.rsa.privatekey.path";
+	public static final String APPLICATION_NAME = "spring.application.name";
+	public static final String APPLICATION_PREFIX = "applicaiton.prefix"; // finapps_
 
 	private final Environment environment;
 
@@ -63,12 +65,20 @@ public class EnvironmentWrapper {
 		return null;
 	}
 
-	public String getRsaPublicKeyFilePath() {
-		return getManadatoryFieldValue(RSA_PUBLIC_RESOURCE_FILE);
+	public String getRsaPublicKeyFilePathForJWTSign() {
+		return getManadatoryFieldValue(JWT_RSA_PUBLICKEY_PATH);
 	}
 
-	public String getRsaPrivateKeyFilePath() {
-		return getManadatoryFieldValue(RSA_PRIVATE_RESOURCE_FILE);
+	public String getRsaPrivateKeyFilePathForJWTSign() {
+		return getManadatoryFieldValue(JWT_RSA_PRIVATEKEY_PATH);
+	}
+
+	public String getRsaPublicKeyForEncryption() {
+		return getManadatoryFieldValue(ENCRYPT_RSA_PUBLICKEY_PATH);
+	}
+
+	public String getRsaPrivateKeyForDecryption() {
+		return getManadatoryFieldValue(DECRYPT_RSA_PRIVATEKEY_PATH);
 	}
 
 }
